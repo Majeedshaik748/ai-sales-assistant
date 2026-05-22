@@ -8,11 +8,11 @@ export default function Dashboard() {
 
   if (isLoading || !stats) {
     return (
-      <div className="p-8 space-y-6">
-        <h1 className="text-3xl font-serif font-bold">Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="p-6 md:p-10 space-y-8 max-w-7xl mx-auto">
+        <h1 className="text-4xl font-light tracking-tight text-white">Overview</h1>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map(i => (
-            <Card key={i} className="animate-pulse bg-muted h-32" />
+            <Card key={i} className="glass shimmer-bg h-36 rounded-xl border-white/[0.05]" />
           ))}
         </div>
       </div>
@@ -20,50 +20,52 @@ export default function Dashboard() {
   }
 
   const cards = [
-    { title: "Total Prospects", value: stats.totalProspects, icon: Users, desc: `${stats.prospectsNew} new this week` },
-    { title: "Active Campaigns", value: stats.totalCampaigns, icon: Megaphone, desc: "Running now" },
-    { title: "Emails Sent", value: stats.emailsSent, icon: Send, desc: `${stats.emailsDraft} drafts pending` },
-    { title: "Prospects Contacted", value: stats.prospectsContacted, icon: Clock, desc: "Awaiting replies" },
+    { title: "Total Prospects", value: stats.totalProspects, icon: Users, desc: `${stats.prospectsNew} new this week`, delay: "delay-[0ms]" },
+    { title: "Active Campaigns", value: stats.totalCampaigns, icon: Megaphone, desc: "Running now", delay: "delay-[75ms]" },
+    { title: "Emails Sent", value: stats.emailsSent, icon: Send, desc: `${stats.emailsDraft} drafts pending`, delay: "delay-[150ms]" },
+    { title: "Prospects Contacted", value: stats.prospectsContacted, icon: Clock, desc: "Awaiting replies", delay: "delay-[225ms]" },
   ];
 
   return (
-    <div className="p-8 space-y-8 max-w-7xl mx-auto">
+    <div className="p-6 md:p-10 space-y-10 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-serif font-bold text-foreground">Overview</h1>
+        <h1 className="text-4xl font-light tracking-tight text-white">Overview</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {cards.map((stat, i) => (
-          <Card key={i} className="border-border/50 shadow-sm">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-muted-foreground" />
+          <Card key={i} className={`glass rounded-xl border-white/[0.05] hover:border-primary/30 transition-all duration-300 hover:glow-violet group animate-fade-up ${stat.delay}`}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 pt-6">
+              <CardTitle className="text-sm font-medium text-zinc-400">{stat.title}</CardTitle>
+              <div className="h-8 w-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <stat.icon size={14} />
+              </div>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold font-serif">{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">{stat.desc}</p>
+            <CardContent className="pb-6">
+              <div className="text-4xl font-semibold text-white">{stat.value}</div>
+              <p className="text-xs text-zinc-500 mt-2 font-medium tracking-wide uppercase">{stat.desc}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="border-border/50 shadow-sm col-span-2">
-          <CardHeader>
-            <CardTitle className="font-serif">Recent Activity</CardTitle>
+      <div className="grid gap-6 md:grid-cols-2 animate-fade-up delay-[300ms]">
+        <Card className="glass rounded-xl border-white/[0.05] col-span-2 hover:border-white/[0.1] transition-colors">
+          <CardHeader className="pb-4 border-b border-white/[0.05]">
+            <CardTitle className="font-light text-xl text-white">Recent Activity</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="pt-6">
+            <div className="space-y-3">
               {stats.recentActivity.map((activity, i) => (
-                <div key={i} className="flex items-center gap-4 text-sm">
-                  <div className="w-2 h-2 rounded-full bg-primary/50" />
-                  <span className="font-medium text-foreground">{activity.type}</span>
-                  <span className="text-muted-foreground flex-1">{activity.description}</span>
-                  <span className="text-muted-foreground text-xs">{new Date(activity.timestamp).toLocaleDateString()}</span>
+                <div key={i} className="flex items-center gap-4 text-sm p-3 rounded-lg hover:bg-white/[0.02] transition-colors group">
+                  <div className={`w-2.5 h-2.5 rounded-full ${activity.type.toLowerCase().includes('sent') ? 'bg-primary glow-violet' : 'bg-zinc-500'}`} />
+                  <span className="font-semibold text-white min-w-[120px]">{activity.type}</span>
+                  <span className="text-zinc-400 flex-1 group-hover:text-zinc-300 transition-colors">{activity.description}</span>
+                  <span className="text-zinc-500 text-xs font-medium tracking-wide">{new Date(activity.timestamp).toLocaleDateString()}</span>
                 </div>
               ))}
               {stats.recentActivity.length === 0 && (
-                <div className="text-sm text-muted-foreground">No recent activity.</div>
+                <div className="text-sm text-zinc-500 py-4 text-center">No recent activity.</div>
               )}
             </div>
           </CardContent>

@@ -14,6 +14,8 @@ import Campaigns from "@/pages/campaigns";
 import NewCampaign from "@/pages/campaign-new";
 import CampaignDetail from "@/pages/campaign-detail";
 import Emails from "@/pages/emails";
+import AiAssistant from "@/pages/ai-assistant";
+import Contact from "@/pages/contact";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +40,9 @@ function Router() {
         <Route path="/campaigns" component={Campaigns} />
         
         <Route path="/emails" component={Emails} />
+        
+        <Route path="/ai-assistant" component={AiAssistant} />
+        <Route path="/contact" component={Contact} />
         
         <Route component={NotFound} />
       </Switch>
