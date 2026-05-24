@@ -429,6 +429,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/DashboardStats"
 
+  /dashboard/campaign-stats:
+    get:
+      operationId: getDashboardCampaignStats
+      tags: [prospects]
+      summary: Get email counts per campaign
+      responses:
+        "200":
+          description: Campaign email statistics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CampaignStat"
+
   /openai/conversations:
     get:
       operationId: listOpenaiConversations
@@ -872,6 +887,26 @@ components:
         - type
         - description
         - timestamp
+
+    CampaignStat:
+      type: object
+      properties:
+        campaignId:
+          type: integer
+        campaignName:
+          type: string
+        sent:
+          type: integer
+        draft:
+          type: integer
+        total:
+          type: integer
+      required:
+        - campaignId
+        - campaignName
+        - sent
+        - draft
+        - total
 
     ApiError:
       type: object
