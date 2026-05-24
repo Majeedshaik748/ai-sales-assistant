@@ -11,6 +11,7 @@ export * from './apiError';
 export * from './campaign';
 export * from './campaignInput';
 export * from './campaignInputTone';
+export * from './campaignStat';
 export * from './campaignUpdate';
 export * from './dashboardStats';
 export * from './email';
