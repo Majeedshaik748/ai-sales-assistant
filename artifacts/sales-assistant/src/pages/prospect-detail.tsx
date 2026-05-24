@@ -94,7 +94,7 @@ export default function ProspectDetail() {
     if (!draftSubject || !draftBody) return;
     createEmail.mutate({ data: { prospectId: id, campaignId: prospect.campaignId || undefined, subject: draftSubject, body: draftBody } }, {
       onSuccess: (email) => {
-        sendEmail.mutate({ data: { id: email.id } }, {
+        sendEmail.mutate({ id: email.id }, {
           onSuccess: () => {
             toast({ title: "Email sent!" });
             queryClient.invalidateQueries({ queryKey: getListEmailsQueryKey({ prospectId: id }) });
