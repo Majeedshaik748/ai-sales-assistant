@@ -23,6 +23,7 @@ import type {
   ApiError,
   Campaign,
   CampaignInput,
+  CampaignStat,
   CampaignUpdate,
   DashboardStats,
   Email,
@@ -1454,6 +1455,83 @@ export function useGetDashboardStats<TData = Awaited<ReturnType<typeof getDashbo
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getGetDashboardStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getGetDashboardCampaignStatsUrl = () => {
+
+
+
+
+  return `/api/dashboard/campaign-stats`
+}
+
+/**
+ * @summary Get email counts per campaign
+ */
+export const getDashboardCampaignStats = async ( options?: RequestInit): Promise<CampaignStat[]> => {
+
+  return customFetch<CampaignStat[]>(getGetDashboardCampaignStatsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetDashboardCampaignStatsQueryKey = () => {
+    return [
+    `/api/dashboard/campaign-stats`
+    ] as const;
+    }
+
+
+export const getGetDashboardCampaignStatsQueryOptions = <TData = Awaited<ReturnType<typeof getDashboardCampaignStats>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDashboardCampaignStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDashboardCampaignStatsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDashboardCampaignStats>>> = ({ signal }) => getDashboardCampaignStats({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDashboardCampaignStats>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetDashboardCampaignStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getDashboardCampaignStats>>>
+export type GetDashboardCampaignStatsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get email counts per campaign
+ */
+
+export function useGetDashboardCampaignStats<TData = Awaited<ReturnType<typeof getDashboardCampaignStats>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getDashboardCampaignStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetDashboardCampaignStatsQueryOptions(options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
