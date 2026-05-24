@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { eq, count, sql } from "drizzle-orm";
 import { db, prospectsTable, campaignsTable, emailsTable } from "@workspace/db";
-import { GetDashboardStatsResponse } from "@workspace/api-zod";
+import { GetDashboardStatsResponse, GetDashboardCampaignStatsResponse } from "@workspace/api-zod";
 
 const router: IRouter = Router();
 
@@ -58,6 +58,29 @@ router.get("/dashboard/stats", async (req, res): Promise<void> => {
   });
 
   res.json(stats);
+});
+
+router.get("/dashboard/campaign-stats", async (req, res): Promise<void> => {
+  const campaigns = await db.select({ id: campaignsTable.id, name: campaignsTable.name }).from(campaignsTable);
+
+  const results = await Promise.all(
+    campaigns.map(async (campaign) => {
+      const [sentRow] = await db
+        .select({ count: count() })
+        .from(emailsTable)
+        .where(sql`${emailsTable.campaignId} = ${campaign.id} AND ${emailsTable.status} = 'sent'`);
+      const [draftRow] = await db
+        .select({ count: count() })
+        .from(emailsTable)
+        .where(sql`${emailsTable.campaignId} = ${campaign.id} AND ${emailsTable.status} = 'draft'`);
+      const sent = sentRow?.count ?? 0;
+      const draft = draftRow?.count ?? 0;
+      return { campaignId: campaign.id, campaignName: campaign.name, sent, draft, total: sent + draft };
+    })
+  );
+
+  const parsed = GetDashboardCampaignStatsResponse.parse(results);
+  res.json(parsed);
 });
 
 export default router;
