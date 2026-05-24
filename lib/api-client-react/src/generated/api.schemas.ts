@@ -164,6 +164,14 @@ export interface DashboardStats {
   recentActivity: ActivityItem[];
 }
 
+export interface CampaignStat {
+  campaignId: number;
+  campaignName: string;
+  sent: number;
+  draft: number;
+  total: number;
+}
+
 export interface ApiError {
   error: string;
 }
