@@ -376,6 +376,19 @@ export const GetDashboardStatsResponse = zod.object({
 
 
 /**
+ * @summary Get email counts per campaign
+ */
+export const GetDashboardCampaignStatsResponseItem = zod.object({
+  "campaignId": zod.number(),
+  "campaignName": zod.string(),
+  "sent": zod.number(),
+  "draft": zod.number(),
+  "total": zod.number()
+})
+export const GetDashboardCampaignStatsResponse = zod.array(GetDashboardCampaignStatsResponseItem)
+
+
+/**
  * @summary List all conversations
  */
 export const ListOpenaiConversationsResponseItem = zod.object({
